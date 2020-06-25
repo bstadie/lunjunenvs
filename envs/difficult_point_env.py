@@ -61,7 +61,7 @@ class PointEnv:
     def step(self, a):
         done = False
         if self.get_in_random_zone():
-            pass
+            a = np.random.randn(*a.shape)
         self.sim.data.ctrl[0:2] = a
         #k = self.sim.data.ctrl
         #self.sim.data.ctrl[0:2] = a

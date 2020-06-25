@@ -30,7 +30,8 @@ def run_v2():
     #env.reset = env.reset_fixed_goal
     #kkkk
     model = SAC(Spol, env, verbose=1, learning_starts=500)
-    model.learn(total_timesteps=30*1000)
+    model.learn(total_timesteps=3*30*1000)
+    #ppp
     #model = PPO1(env=env, policy=PPOPol, verbose=0)
     #model.learn(total_timesteps=2*25*40000, log_interval=10000)
 
@@ -75,7 +76,7 @@ def run_v2():
 
         for i in range(horizon):
             action, _states = model.predict(obs)
-            action += 1.0 * 0.25 * np.random.randn(len(action))
+            #action += 1.0 * 0.25 * np.random.randn(len(action))
             #action = 0.0 * 0.3 * np.random.randn(len(action))
             #action -= 0.74
             obs, rewards, dones, info = env.step(action)

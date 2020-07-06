@@ -77,18 +77,37 @@ class PointEnv:
             #self.reset()
         return obs, rew, done, dict()
 
+
+    def set_goal(self, goal_vec):
+        assert len(goal_vec) == 2
+        qpos = copy.deepcopy(self.sim.data.qpos)
+        qpos[2:4] = goal_vec
+        self.set_state(qpos, np.zeros_like(qpos))
+
+
+    def get_goal(self):
+        return copy.deepcopy(self.sim.data.qpos[2:4])
+
+    def get_random_goal(self):
+        return np.random.uniform(-0.5, 0.5, 2)
+
     def get_body_com(self, body_name):
         return self.sim.data.get_body_xpos(body_name)
 
     def get_obs(self):
-        qpos = self.sim.data.qpos
-        qvel = self.sim.data.qvel
+        qpos = copy.deepcopy(self.sim.data.qpos)
+        qvel = copy.deepcopy(self.sim.data.qvel)
+        qpos = qpos[0:2]
+        qvel = qvel[0:2]
         obs = np.concatenate([qpos, qvel])
         return obs
 
     def reset(self):
         qpos, qvel = self.get_random_state()
-        self.set_state(qpos, qvel)
+        current_qpos = copy.deepcopy(qpos)
+        current_qpos[2:4] = copy.deepcopy(self.sim.data.qpos[2:4])
+        self.set_state(current_qpos, qvel)
+
         #print("Resetting")
         self.cur_step = 0
         return self.get_obs()
